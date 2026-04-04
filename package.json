@@ -1,0 +1,14 @@
+{
+  "name": "com.munteanuion.im-character-controller-advanced",
+  "version": "1.0.2",
+  "displayName": "_CharacterController_Advanced",
+  "description": "Support Telegram: @MunteanuIon. \n\n_CharacterController_Advanced",
+  "unity": "2021.3",
+  "author": {
+    "name": "munteanuion",
+    "url": "https://github.com/munteanuion/_CharacterController_Advanced.git"
+  },
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
+  }
+}
