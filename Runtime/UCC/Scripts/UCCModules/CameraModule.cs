@@ -10,7 +10,7 @@ namespace UniversalCharacterController.Scripts.Modules
         public PerspectiveMode perspectiveMode = PerspectiveMode.ThirdPerson;
         
         [Tooltip("The follow target set in the Cinemachine Virtual Camera")]
-        public GameObject cinemachineCameraTarget;
+        public Transform cinemachineCameraTarget;
 
         [Tooltip("How far in degrees can you move the camera up")]
         public float topClamp = 90.0f;
@@ -67,7 +67,7 @@ namespace UniversalCharacterController.Scripts.Modules
             _cinemachineTargetPitch += input.look.y * _data.firstPersonRotationSpeed * deltaTimeMultiplier;
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, _data.bottomClamp, _data.topClamp);
 
-            _data.cinemachineCameraTarget.transform.localRotation =
+            _data.cinemachineCameraTarget.localRotation =
                 Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
 
             playerTransform.Rotate(Vector3.up * yawDelta);
@@ -86,7 +86,7 @@ namespace UniversalCharacterController.Scripts.Modules
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, _data.bottomClamp, _data.topClamp);
 
-            _data.cinemachineCameraTarget.transform.rotation = Quaternion.Euler(
+            _data.cinemachineCameraTarget.rotation = Quaternion.Euler(
                 _cinemachineTargetPitch + _data.cameraAngleOverride,
                 _cinemachineTargetYaw,
                 0.0f);

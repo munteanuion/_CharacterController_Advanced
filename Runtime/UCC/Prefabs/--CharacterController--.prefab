@@ -1468,8 +1468,8 @@ MonoBehaviour:
     jumpTimeout: 0.5
     fallTimeout: 0.15
   cameraInspector:
-    perspectiveMode: 0
-    cinemachineCameraTarget: {fileID: 3349065747551714774}
+    perspectiveMode: 1
+    cinemachineCameraTarget: {fileID: 7322481436244026740}
     topClamp: 60
     bottomClamp: -80
     cameraAngleOverride: 0

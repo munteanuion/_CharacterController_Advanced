@@ -13,13 +13,11 @@ namespace UniversalCharacterController.Scripts
     /// </summary>
     
     [RequireComponent(typeof(CharacterController))]
-#if ENABLE_INPUT_SYSTEM
     [RequireComponent(typeof(PlayerInput))]
-#endif
-    public class UniversalCharacterController : MonoBehaviour
+    public class UCharacterController : MonoBehaviour, IUCharacterController
     {
         #region Inspector
-
+        
         [SerializeField] private MovementModuleInspector movementInspector;
         [SerializeField] private CameraModuleInspector cameraInspector;
         [SerializeField] private GroundedModuleInspector groundedInspector;
@@ -47,10 +45,7 @@ namespace UniversalCharacterController.Scripts
         private CharacterController _controller;
         private UCCInputs _input;
         private GameObject _mainCamera;
-
-#if ENABLE_INPUT_SYSTEM
         private PlayerInput _playerInput;
-#endif
 
         #endregion
 
@@ -58,19 +53,9 @@ namespace UniversalCharacterController.Scripts
         
         #region Properties
 
-        public bool Grounded { get; private set; } = true;
-
-        private bool IsCurrentDeviceMouse
-        {
-            get
-            {
-#if ENABLE_INPUT_SYSTEM
-                return _playerInput.currentControlScheme == "KeyboardMouse";
-#else
-                return false;
-#endif
-            }
-        }
+        public Transform TargetForCamera => cameraInspector.cinemachineCameraTarget;
+        public bool IsGrounded { get; private set; } = true;
+        private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
 
         #endregion
 
@@ -87,12 +72,7 @@ namespace UniversalCharacterController.Scripts
         {
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<UCCInputs>();
-
-#if ENABLE_INPUT_SYSTEM
             _playerInput = GetComponent<PlayerInput>();
-#else
-            Debug.LogError("Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
-#endif
 
             TryGetComponent(out Animator detectedAnimator);
 
@@ -109,9 +89,9 @@ namespace UniversalCharacterController.Scripts
 
         private void Update()
         {
-            Grounded = _groundedModule.Check(transform.position);
-            _animationModule.SetGrounded(Grounded);
-            _movementModule.UpdatePhysics(_input, Grounded, _animationModule);
+            IsGrounded = _groundedModule.Check(transform.position);
+            _animationModule.SetGrounded(IsGrounded);
+            _movementModule.UpdatePhysics(_input, IsGrounded, _animationModule);
 
             MovementResult movementResult = cameraInspector.perspectiveMode == PerspectiveMode.FirstPerson
                 ? _movementModule.MoveFirstPerson(_input, _controller, transform)
@@ -147,7 +127,7 @@ namespace UniversalCharacterController.Scripts
         {
             _groundedModule.DrawGizmos(
                 transform.position, 
-                Grounded, 
+                IsGrounded, 
                 groundedInspector.groundedOffset, 
                 groundedInspector.groundedRadius);
         }
