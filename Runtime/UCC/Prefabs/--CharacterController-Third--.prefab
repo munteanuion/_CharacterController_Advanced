@@ -1420,7 +1420,7 @@ GameObject:
   - component: {fileID: 852646319958396206}
   - component: {fileID: 7033807634527345260}
   m_Layer: 8
-  m_Name: --CharacterController--
+  m_Name: --CharacterController-Third--
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
