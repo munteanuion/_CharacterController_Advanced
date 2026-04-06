@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 304918960597714609, guid: 69078c7da3ff0af43b559472b8baa41d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1423595799150631986, guid: 69078c7da3ff0af43b559472b8baa41d, type: 3}
       propertyPath: cameraInspector.perspectiveMode
       value: 0
@@ -70,6 +74,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 852646319958396206, guid: 69078c7da3ff0af43b559472b8baa41d, type: 3}
+    - {fileID: 304918960597714609, guid: 69078c7da3ff0af43b559472b8baa41d, type: 3}
     m_RemovedGameObjects:
     - {fileID: 4662338472246035046, guid: 69078c7da3ff0af43b559472b8baa41d, type: 3}
     - {fileID: 2349088321619091449, guid: 69078c7da3ff0af43b559472b8baa41d, type: 3}
