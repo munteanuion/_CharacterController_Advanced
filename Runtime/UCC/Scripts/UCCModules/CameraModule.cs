@@ -48,23 +48,25 @@ namespace UniversalCharacterController.Scripts.Modules
         }
         
         
-        public void LateUpdate(UCCInputsWrapper input, bool isMouseInput, Transform playerTransform)
+        public void LateUpdate(UCCInputData inputData, bool isMouseInput, Transform playerTransform)
         {
             if (_data.perspectiveMode == PerspectiveMode.FirstPerson)
-                RotateFirstPerson(input, playerTransform, isMouseInput);
+                RotateFirstPerson(inputData, playerTransform, isMouseInput);
             else
-                RotateThirdPerson(input, isMouseInput);
+                RotateThirdPerson(inputData, isMouseInput);
         }
 
 
-        private void RotateFirstPerson(UCCInputsWrapper input, Transform playerTransform, bool isMouseInput)
+        private void RotateFirstPerson(UCCInputData inputData, Transform playerTransform, bool isMouseInput)
         {
-            if (input.look.sqrMagnitude < Threshold) return;
+            if (inputData.look.sqrMagnitude < Threshold) return;
 
             float deltaTimeMultiplier = isMouseInput ? 1.0f : Time.deltaTime;
-            float yawDelta = input.look.x * _data.firstPersonRotationSpeed * deltaTimeMultiplier;
+            float sensitivity = inputData.lookSensitivity > 0f ? inputData.lookSensitivity : 1f;
+            float yawDelta = inputData.look.x * _data.firstPersonRotationSpeed * deltaTimeMultiplier * sensitivity;
 
-            _cinemachineTargetPitch += input.look.y * _data.firstPersonRotationSpeed * deltaTimeMultiplier;
+            float lookY = inputData.invertLookY ? -inputData.look.y : inputData.look.y;
+            _cinemachineTargetPitch += lookY * _data.firstPersonRotationSpeed * deltaTimeMultiplier * sensitivity;
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, _data.bottomClamp, _data.topClamp);
 
             _data.cinemachineCameraTarget.localRotation =
@@ -74,13 +76,15 @@ namespace UniversalCharacterController.Scripts.Modules
         }
 
 
-        private void RotateThirdPerson(UCCInputsWrapper input, bool isMouseInput)
+        private void RotateThirdPerson(UCCInputData inputData, bool isMouseInput)
         {
-            if (!_data.lockCameraPosition && input.look.sqrMagnitude >= Threshold)
+            if (!_data.lockCameraPosition && inputData.look.sqrMagnitude >= Threshold)
             {
                 float deltaTimeMultiplier = isMouseInput ? 1.0f : Time.deltaTime;
-                _cinemachineTargetYaw += input.look.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += input.look.y * deltaTimeMultiplier;
+                float sensitivity = inputData.lookSensitivity > 0f ? inputData.lookSensitivity : 1f;
+                _cinemachineTargetYaw += inputData.look.x * deltaTimeMultiplier * sensitivity;
+                float lookY = inputData.invertLookY ? -inputData.look.y : inputData.look.y;
+                _cinemachineTargetPitch += lookY * deltaTimeMultiplier * sensitivity;
             }
 
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);

@@ -79,22 +79,22 @@ namespace UniversalCharacterController.Scripts.Modules
 
         
         
-        public MovementResult MoveFirstPerson(UCCInputsWrapper input, CharacterController controller, Transform playerTransform)
+        public MovementResult MoveFirstPerson(UCCInputData inputData, CharacterController controller, Transform playerTransform)
         {
-            float targetSpeed = input.sprint ? _data.sprintSpeed : _data.moveSpeed;
-            if (input.move == Vector2.zero) targetSpeed = 0.0f;
+            float targetSpeed = inputData.sprint ? _data.sprintSpeed : _data.moveSpeed;
+            if (inputData.move == Vector2.zero) targetSpeed = 0.0f;
 
             float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
-            float inputMagnitude = input.analogMovement ? input.move.magnitude : 1f;
+            float inputMagnitude = inputData.analogMovement ? inputData.move.magnitude : 1f;
 
             _speed = CalculateSmoothedSpeed(currentHorizontalSpeed, targetSpeed, inputMagnitude);
 
             _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * _data.speedChangeRate);
             if (_animationBlend < MinAnimationBlend) _animationBlend = 0f;
 
-            Vector3 inputDirection = new Vector3(input.move.x, 0.0f, input.move.y).normalized;
-            if (input.move != Vector2.zero)
-                inputDirection = playerTransform.right * input.move.x + playerTransform.forward * input.move.y;
+            Vector3 inputDirection = new Vector3(inputData.move.x, 0.0f, inputData.move.y).normalized;
+            if (inputData.move != Vector2.zero)
+                inputDirection = playerTransform.right * inputData.move.x + playerTransform.forward * inputData.move.y;
 
             controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) +
                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
@@ -104,22 +104,22 @@ namespace UniversalCharacterController.Scripts.Modules
 
         
         
-        public MovementResult MoveThirdPerson(UCCInputsWrapper input, CharacterController controller,
+        public MovementResult MoveThirdPerson(UCCInputData inputData, CharacterController controller,
             Transform playerTransform, GameObject mainCamera)
         {
-            float targetSpeed = input.sprint ? _data.sprintSpeed : _data.moveSpeed;
-            if (input.move == Vector2.zero) targetSpeed = 0.0f;
+            float targetSpeed = inputData.sprint ? _data.sprintSpeed : _data.moveSpeed;
+            if (inputData.move == Vector2.zero) targetSpeed = 0.0f;
 
             float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
-            float inputMagnitude = input.analogMovement ? input.move.magnitude : 1f;
+            float inputMagnitude = inputData.analogMovement ? inputData.move.magnitude : 1f;
 
             _speed = CalculateSmoothedSpeed(currentHorizontalSpeed, targetSpeed, inputMagnitude);
 
             _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * _data.speedChangeRate);
             if (_animationBlend < MinAnimationBlend) _animationBlend = 0f;
 
-            Vector3 inputDirection = new Vector3(input.move.x, 0.0f, input.move.y).normalized;
-            if (input.move != Vector2.zero)
+            Vector3 inputDirection = new Vector3(inputData.move.x, 0.0f, inputData.move.y).normalized;
+            if (inputData.move != Vector2.zero)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   mainCamera.transform.eulerAngles.y;
@@ -137,7 +137,7 @@ namespace UniversalCharacterController.Scripts.Modules
 
         
         
-        public void UpdatePhysics(UCCInputsWrapper input, bool grounded, AnimationModule animationModule)
+        public void UpdatePhysics(UCCInputData inputData, bool grounded, AnimationModule animationModule)
         {
             if (grounded)
             {
@@ -149,7 +149,7 @@ namespace UniversalCharacterController.Scripts.Modules
                 if (_verticalVelocity < 0.0f)
                     _verticalVelocity = GroundedVelocityReset;
 
-                if (input.jump && _jumpTimeoutDelta <= 0.0f)
+                if (inputData.jump && _jumpTimeoutDelta <= 0.0f)
                 {
                     _verticalVelocity = Mathf.Sqrt(_data.jumpHeight * -2f * _data.gravity);
                     animationModule.SetJump(true);
@@ -167,7 +167,7 @@ namespace UniversalCharacterController.Scripts.Modules
                 else
                     animationModule.SetFreeFall(true);
 
-                input.jump = false;
+                // input.jump = false; // нельзя изменять структуру напрямую, если нужно сбросить — добавить метод в UCCInputsWrapper
             }
 
             if (_verticalVelocity < TerminalVelocity)

@@ -3,67 +3,56 @@ using UnityEngine.InputSystem;
 
 namespace UniversalCharacterController.Scripts
 {
-	public class UCCInputsWrapper : MonoBehaviour
+	public class UCCInputsWrapper : MonoBehaviour, IUCCInputsWrapper
 	{
-		[Header("Character Input Values")]
-		public Vector2 move;
-		public Vector2 look;
-		public bool jump;
-		public bool sprint;
+		[SerializeField] private UCCInputData inputData;
 
-		[Header("Movement Settings")]
-		public bool analogMovement;
+		public UCCInputData InputData => inputData;
 
-		[Header("Mouse Cursor Settings")]
-		public bool cursorLocked = true;
-		public bool cursorInputForLook = true;
-
-
+		
 		
 		public void MoveInput(Vector2 newMoveDirection)
 		{
-			move = newMoveDirection;
-		} 
+			inputData.move = newMoveDirection;
+		}
 
 		public void LookInput(Vector2 newLookDirection)
 		{
-			look = newLookDirection;
+			inputData.look = newLookDirection;
 		}
 
 		public void JumpInput(bool newJumpState)
 		{
-			jump = newJumpState;
+			inputData.jump = newJumpState;
 		}
 
 		public void SprintInput(bool newSprintState)
 		{
-			sprint = newSprintState;
+			inputData.sprint = newSprintState;
 		}
-		
+
 		private void OnApplicationFocus(bool hasFocus)
 		{
-			SetCursorState(cursorLocked);
+			SetCursorState(inputData.cursorLocked);
 		}
 
 		private void SetCursorState(bool newState)
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}
-		
-		
-		
+
+
+
 		#region SEND MESSAGE FROM INPUT COMPONENT FOR TEST
 		
 		public void OnMove(InputValue value) => MoveInput(value.Get<Vector2>());
+		public void OnJump(InputValue value) => JumpInput(value.isPressed);
+		public void OnSprint(InputValue value) => SprintInput(value.isPressed);
 
 		public void OnLook(InputValue value)
 		{
-			if (cursorInputForLook) LookInput(value.Get<Vector2>());
+			if (inputData.cursorInputForLook) LookInput(value.Get<Vector2>());
 		}
-		
-		public void OnJump(InputValue value) => JumpInput(value.isPressed);
-
-		public void OnSprint(InputValue value) => SprintInput(value.isPressed);
 
 		#endregion
 	}

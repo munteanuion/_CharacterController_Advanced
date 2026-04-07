@@ -42,9 +42,9 @@ namespace UniversalCharacterController.Scripts
         #region Private State
 
         private CharacterController _controller;
-        private UCCInputsWrapper _input;
+        private IUCCInputsWrapper _input;
+        private UCCInputData InputData => _input?.InputData ?? default;
         private GameObject _mainCamera;
-        //private PlayerInput _playerInput;
 
         #endregion
 
@@ -54,27 +54,29 @@ namespace UniversalCharacterController.Scripts
 
         public Transform TargetForCamera => cameraInspector.cinemachineCameraTarget;
         public bool IsGrounded { get; private set; } = true;
-        //private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
 
         #endregion
 
         
         
         #region Unity Lifecycle
+        
+        public void Init(IUCCInputsWrapper inputWrapper)
+        {
+            _input = inputWrapper;
+            _mainCamera = Camera.main?.gameObject;
+            _controller = GetComponent<CharacterController>();
+        }
 
         private void Awake()
         {
-            _mainCamera = Camera.main?.gameObject;
+            Init(GetComponent<IUCCInputsWrapper>());
         }
 
         private void Start()
         {
-            _controller = GetComponent<CharacterController>();
-            _input = GetComponent<UCCInputsWrapper>();
-            //_playerInput = GetComponent<PlayerInput>();
-
             TryGetComponent(out Animator detectedAnimator);
-
+            
             float initialCameraYaw = cameraInspector.cinemachineCameraTarget != null
                 ? cameraInspector.cinemachineCameraTarget.transform.rotation.eulerAngles.y
                 : 0f;
@@ -88,13 +90,14 @@ namespace UniversalCharacterController.Scripts
 
         private void Update()
         {
+            var inputData = InputData;
             IsGrounded = _groundedModule.Check(transform.position);
             _animationModule.SetGrounded(IsGrounded);
-            _movementModule.UpdatePhysics(_input, IsGrounded, _animationModule);
+            _movementModule.UpdatePhysics(inputData, IsGrounded, _animationModule);
 
             MovementResult movementResult = cameraInspector.perspectiveMode == PerspectiveMode.FirstPerson
-                ? _movementModule.MoveFirstPerson(_input, _controller, transform)
-                : _movementModule.MoveThirdPerson(_input, _controller, transform, _mainCamera);
+                ? _movementModule.MoveFirstPerson(inputData, _controller, transform)
+                : _movementModule.MoveThirdPerson(inputData, _controller, transform, _mainCamera);
 
             _animationModule.SetSpeed(movementResult.AnimationBlend);
             _animationModule.SetMotionSpeed(movementResult.InputMagnitude);
@@ -102,7 +105,8 @@ namespace UniversalCharacterController.Scripts
 
         private void LateUpdate()
         {
-            _cameraModule.LateUpdate(_input, false/*IsCurrentDeviceMouse*/, transform);
+            var inputData = InputData;
+            _cameraModule.LateUpdate(inputData, false/*IsCurrentDeviceMouse*/, transform);
         }
 
         #endregion
