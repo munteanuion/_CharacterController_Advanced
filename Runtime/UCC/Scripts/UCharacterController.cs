@@ -44,7 +44,7 @@ namespace UniversalCharacterController.Scripts
         private CharacterController _controller;
         private UCCInputs _input;
         private GameObject _mainCamera;
-        private PlayerInput _playerInput;
+        //private PlayerInput _playerInput;
 
         #endregion
 
@@ -54,7 +54,7 @@ namespace UniversalCharacterController.Scripts
 
         public Transform TargetForCamera => cameraInspector.cinemachineCameraTarget;
         public bool IsGrounded { get; private set; } = true;
-        private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
+        //private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
 
         #endregion
 
@@ -71,7 +71,7 @@ namespace UniversalCharacterController.Scripts
         {
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<UCCInputs>();
-            _playerInput = GetComponent<PlayerInput>();
+            //_playerInput = GetComponent<PlayerInput>();
 
             TryGetComponent(out Animator detectedAnimator);
 
@@ -102,7 +102,7 @@ namespace UniversalCharacterController.Scripts
 
         private void LateUpdate()
         {
-            _cameraModule.LateUpdate(_input, IsCurrentDeviceMouse, transform);
+            _cameraModule.LateUpdate(_input, false/*IsCurrentDeviceMouse*/, transform);
         }
 
         #endregion
