@@ -4,7 +4,7 @@ using UniversalCharacterController.Scripts;
 public class UICanvasControllerInput : MonoBehaviour
 {
 
-    [Header("Output")] public UCCInputs uccInputs;
+    [Header("Output")] public UCCInputsWrapper uccInputs;
 
     public void VirtualMoveInput(Vector2 virtualMoveDirection)
     {

@@ -42,7 +42,7 @@ namespace UniversalCharacterController.Scripts
         #region Private State
 
         private CharacterController _controller;
-        private UCCInputs _input;
+        private UCCInputsWrapper _input;
         private GameObject _mainCamera;
         //private PlayerInput _playerInput;
 
@@ -70,7 +70,7 @@ namespace UniversalCharacterController.Scripts
         private void Start()
         {
             _controller = GetComponent<CharacterController>();
-            _input = GetComponent<UCCInputs>();
+            _input = GetComponent<UCCInputsWrapper>();
             //_playerInput = GetComponent<PlayerInput>();
 
             TryGetComponent(out Animator detectedAnimator);

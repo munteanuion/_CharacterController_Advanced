@@ -79,7 +79,7 @@ namespace UniversalCharacterController.Scripts.Modules
 
         
         
-        public MovementResult MoveFirstPerson(UCCInputs input, CharacterController controller, Transform playerTransform)
+        public MovementResult MoveFirstPerson(UCCInputsWrapper input, CharacterController controller, Transform playerTransform)
         {
             float targetSpeed = input.sprint ? _data.sprintSpeed : _data.moveSpeed;
             if (input.move == Vector2.zero) targetSpeed = 0.0f;
@@ -104,7 +104,7 @@ namespace UniversalCharacterController.Scripts.Modules
 
         
         
-        public MovementResult MoveThirdPerson(UCCInputs input, CharacterController controller,
+        public MovementResult MoveThirdPerson(UCCInputsWrapper input, CharacterController controller,
             Transform playerTransform, GameObject mainCamera)
         {
             float targetSpeed = input.sprint ? _data.sprintSpeed : _data.moveSpeed;
@@ -137,7 +137,7 @@ namespace UniversalCharacterController.Scripts.Modules
 
         
         
-        public void UpdatePhysics(UCCInputs input, bool grounded, AnimationModule animationModule)
+        public void UpdatePhysics(UCCInputsWrapper input, bool grounded, AnimationModule animationModule)
         {
             if (grounded)
             {

@@ -48,7 +48,7 @@ namespace UniversalCharacterController.Scripts.Modules
         }
         
         
-        public void LateUpdate(UCCInputs input, bool isMouseInput, Transform playerTransform)
+        public void LateUpdate(UCCInputsWrapper input, bool isMouseInput, Transform playerTransform)
         {
             if (_data.perspectiveMode == PerspectiveMode.FirstPerson)
                 RotateFirstPerson(input, playerTransform, isMouseInput);
@@ -57,7 +57,7 @@ namespace UniversalCharacterController.Scripts.Modules
         }
 
 
-        private void RotateFirstPerson(UCCInputs input, Transform playerTransform, bool isMouseInput)
+        private void RotateFirstPerson(UCCInputsWrapper input, Transform playerTransform, bool isMouseInput)
         {
             if (input.look.sqrMagnitude < Threshold) return;
 
@@ -74,7 +74,7 @@ namespace UniversalCharacterController.Scripts.Modules
         }
 
 
-        private void RotateThirdPerson(UCCInputs input, bool isMouseInput)
+        private void RotateThirdPerson(UCCInputsWrapper input, bool isMouseInput)
         {
             if (!_data.lockCameraPosition && input.look.sqrMagnitude >= Threshold)
             {

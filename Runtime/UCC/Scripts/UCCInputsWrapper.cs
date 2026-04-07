@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace UniversalCharacterController.Scripts
 {
-	public class UCCInputs : MonoBehaviour
+	public class UCCInputsWrapper : MonoBehaviour
 	{
 		[Header("Character Input Values")]
 		public Vector2 move;
@@ -18,32 +18,8 @@ namespace UniversalCharacterController.Scripts
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
+
 		
-		
-		public void OnMove(InputValue value)
-		{
-			MoveInput(value.Get<Vector2>());
-		}
-
-		public void OnLook(InputValue value)
-		{
-			if(cursorInputForLook)
-			{
-				LookInput(value.Get<Vector2>());
-			}
-		}
-
-		public void OnJump(InputValue value)
-		{
-			JumpInput(value.isPressed);
-		}
-
-		public void OnSprint(InputValue value)
-		{
-			SprintInput(value.isPressed);
-		}
-
-
 		public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
@@ -73,6 +49,22 @@ namespace UniversalCharacterController.Scripts
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}
+		
+		
+		
+		#region SEND MESSAGE FROM INPUT COMPONENT FOR TEST
+		
+		public void OnMove(InputValue value) => MoveInput(value.Get<Vector2>());
+
+		public void OnLook(InputValue value)
+		{
+			if (cursorInputForLook) LookInput(value.Get<Vector2>());
+		}
+		
+		public void OnJump(InputValue value) => JumpInput(value.isPressed);
+
+		public void OnSprint(InputValue value) => SprintInput(value.isPressed);
+
+		#endregion
 	}
-	
 }
