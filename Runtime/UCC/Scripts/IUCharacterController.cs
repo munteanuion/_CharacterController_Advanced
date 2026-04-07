@@ -1,10 +1,12 @@
+using System;
 using UnityEngine;
 
 namespace UniversalCharacterController.Scripts
 {
-    public interface IUCharacterController
+    public interface IUCharacterController : IDisposable
     {
-        public bool IsGrounded { get; }
-        public Transform TargetForCamera { get; }
+        bool IsGrounded { get; }
+        Transform TargetForCamera { get; }
+        void Init(IUCCInputsWrapper inputWrapper);
     }
 }

@@ -67,6 +67,13 @@ namespace UniversalCharacterController.Scripts
             _mainCamera = Camera.main?.gameObject;
             _controller = GetComponent<CharacterController>();
         }
+        
+        public void Dispose()
+        {
+            
+        }
+        
+        
 
         private void Awake()
         {
