@@ -13,7 +13,6 @@ namespace UniversalCharacterController.Scripts
     /// </summary>
     
     [RequireComponent(typeof(CharacterController))]
-    [RequireComponent(typeof(PlayerInput))]
     public class UCharacterController : MonoBehaviour, IUCharacterController
     {
         #region Inspector

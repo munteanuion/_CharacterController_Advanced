@@ -18,7 +18,8 @@ namespace UniversalCharacterController.Scripts
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
-#if ENABLE_INPUT_SYSTEM
+		
+		
 		public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
@@ -41,7 +42,6 @@ namespace UniversalCharacterController.Scripts
 		{
 			SprintInput(value.isPressed);
 		}
-#endif
 
 
 		public void MoveInput(Vector2 newMoveDirection)
