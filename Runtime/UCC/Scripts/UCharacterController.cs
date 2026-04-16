@@ -67,14 +67,34 @@ namespace UniversalCharacterController.Scripts
             _mainCamera = Camera.main?.gameObject;
             _controller = GetComponent<CharacterController>();
         }
-        
+
         public void Dispose()
         {
             
         }
         
         
+        
+        public void Enable()
+        {
+            gameObject.SetActive(true);
+        }
 
+        public void Disable()
+        {
+            gameObject.SetActive(false);
+        }
+
+        public void Teleport(Vector3 position, Vector3 eulerAngles)
+        {
+            _controller.enabled = false;
+            transform.position = position;
+            transform.eulerAngles = eulerAngles;
+            _controller.enabled = true;
+        }
+
+        
+        
         private void Awake()
         {
             Init(GetComponent<IUCCInputsWrapper>());
